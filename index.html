@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>草地棋简易计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        label, input, button {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>草地棋简易计算器</h1>
+        <label for="start">起始格：</label>
+        <input type="text" id="start" value="">
+
+        <label for="dice">骰子数目：</label>
+        <input type="text" id="dice" value="">
+
+        <label for="seedNum">婆婆纳种子数量：</label>
+        <input type="text" id="seedNum" value="">
+
+        <button onclick="showOut()">计算！</button>
+
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        function cal(start, dice, seedNum) {
+            let end = parseInt(start) + parseInt(dice);
+            seedNum = parseInt(seedNum);
+
+            if (end >= 42) {
+                end = 41;
+                start = 0;
+                chageOld(0, seedNum);
+                return `${dice}步，${start}-终点，获得1婆婆花石`;
+            }
+
+            const seed_5 = [2, 6, 16, 21, 26, 31, 34];
+            const seed_10 = [1, 11, 18, 23, 27, 32, 36, 40];
+            const seed_25 = [3, 9, 13, 19, 24, 29, 33, 37];
+            const seed_50 = [5, 8, 14, 20, 25, 39];
+            const flower = [4, 12, 22, 35];
+            const ant_buy_direct = [7, 15, 28, 41];
+            const ant_buy_reserve = [10, 17, 38];
+            const half_discount = [30];
+
+            let out;
+            if (seed_5.includes(end)) {
+                seedNum += 5;
+                out = `${dice}步，${start}-${end}，获得5婆婆纳种子，共${seedNum}婆婆纳种子`;
+            } else if (seed_10.includes(end)) {
+                seedNum += 10;
+                out = `${dice}步，${start}-${end}，获得10婆婆纳种子，共${seedNum}婆婆纳种子`;
+            } else if (seed_25.includes(end)) {
+                seedNum += 25;
+                out = `${dice}步，${start}-${end}，获得25婆婆纳种子，共${seedNum}婆婆纳种子`;
+            } else if (seed_50.includes(end)) {
+                seedNum += 50;
+                out = `${dice}步，${start}-${end}，获得50婆婆纳种子，共${seedNum}婆婆纳种子`;
+            } else if (flower.includes(end)) {
+                out = `${dice}步，${start}-${end}，获得1婆婆纳花`;
+            } else if (ant_buy_direct.includes(end)) {
+                out = `${dice}步，${start}-${end}，获得1蚂蚁商队直购券`;
+            } else if (ant_buy_reserve.includes(end)) {
+                out = `${dice}步，${start}-${end}，获得1蚂蚁商队订购券`;
+            } else if (half_discount.includes(end)) {
+                out = `${dice}步，${start}-${end}，获得1婆婆花石`;
+            } else {
+                out = "出了另一个小问题，请小窗报错给【白尾雷鸟】克里托利亚";
+            }
+            chageOld(end, seedNum);
+            return out;
+        }
+
+        function showOut() {
+            const start = document.getElementById('start').value;
+            const dice = document.getElementById('dice').value;
+            const seedNum = document.getElementById('seedNum').value;
+            const out = cal(start, dice, seedNum);
+            document.getElementById('output').innerText = out;
+        }
+
+        function chageOld(nstart, nNum) {
+            document.getElementById('start').value = nstart;
+            document.getElementById('seedNum').value = nNum;
+        }
+    </script>
+</body>
+</html>
